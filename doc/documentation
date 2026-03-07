@@ -1,0 +1,15 @@
+Project Name: Motivation App
+
+Features:
+- Daily motivational quote
+- Dashboard with quotes
+- Profile management
+- Refer friend
+- Android + Web app
+
+Tech Stack:
+Backend: Node.js
+Database: MongoDB
+Android: Flutter
+Web: React
+Cloud: Azure
