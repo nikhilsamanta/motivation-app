@@ -1,3 +1,16 @@
-node_modules
+node_modules/
 .env
+.env.*
 backend/.env
+frontend/.env
+*.log
+.expo/
+dist/
+web-build/
+.eas/
+serviceAccountKey.json
+auth_config.json
+*.pem
+*.key
+.system_generated/
+.gemini/

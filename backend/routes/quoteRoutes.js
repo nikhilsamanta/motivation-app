@@ -36,19 +36,16 @@ router.post("/add", async (req, res) => {
 // Get all quotes
 router.get("/all", authMiddleware, async (req, res) => {
     try {
-
+        console.log(`GET /api/quotes/all request from user: ${req.user.id || req.user._id || 'unknown'}`);
         const quotes = await Quote.find();
-
+        console.log(`Found ${quotes.length} quotes to send`);
         res.json(quotes);
-
     } catch (error) {
-
+        console.error("Error fetching quotes:", error);
         res.status(500).json({
             message: "Error fetching quotes"
         });
-
     }
-
 });
 
 module.exports = router;

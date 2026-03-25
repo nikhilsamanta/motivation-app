@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
     },
 
     referredBy: String,
+    pushToken: String,
 
     createdAt: {
         type: Date,
