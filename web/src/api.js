@@ -1,5 +1,5 @@
 // API configuration for production and development
-const BASE_URL = import.meta.env.VITE_API_URL || 'https://motivation-app-a3dgajgzdcfcfdd2.southeastasia-01.azurewebsites.net/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://motivation-app-backend-bgd7abfkf9eegahs.francecentral-01.azurewebsites.net/api';
 
 const apiFetch = async (endpoint, options = {}) => {
     const token = localStorage.getItem('token');
