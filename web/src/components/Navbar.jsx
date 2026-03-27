@@ -11,6 +11,7 @@ function Navbar({ userName, onLogout }) {
 
                 <div className="navbar-right">
                     <Link to="/dashboard" className="navbar-link">Dashboard</Link>
+                    <Link to="/refer" className="navbar-link">Refer</Link>
                     <Link to="/profile" className="navbar-link">Profile</Link>
                     <div className="navbar-divider" />
                     <div className="navbar-user">

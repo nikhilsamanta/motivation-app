@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import QuoteCard from '../components/QuoteCard';
+import { api } from '../api';
 import './Dashboard.css';
-
-const API_URL = 'http://localhost:5000/api';
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -18,21 +17,10 @@ function Dashboard() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [profileRes, quotesRes] = await Promise.all([
-                    fetch(`${API_URL}/auth/profile`, {
-                        headers: { Authorization: token },
-                    }),
-                    fetch(`${API_URL}/quotes/all`, {
-                        headers: { Authorization: token },
-                    }),
+                const [profileData, quotesData] = await Promise.all([
+                    api.auth.getProfile(),
+                    api.quotes.getAll()
                 ]);
-
-                if (!profileRes.ok || !quotesRes.ok) {
-                    throw new Error('Failed to load data');
-                }
-
-                const profileData = await profileRes.json();
-                const quotesData = await quotesRes.json();
 
                 setUser(profileData);
                 setQuotes(quotesData);

@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import Refer from './pages/Refer';
 
 function ProtectedRoute({ children }) {
     const token = localStorage.getItem('token');
@@ -33,6 +34,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Profile />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/refer"
+                    element={
+                        <ProtectedRoute>
+                            <Refer />
                         </ProtectedRoute>
                     }
                 />

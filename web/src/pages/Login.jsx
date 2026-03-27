@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-const API_URL = 'http://localhost:5000/api';
+import { api } from '../api';
 
 function Login() {
     const navigate = useNavigate();
@@ -19,18 +18,7 @@ function Login() {
         setLoading(true);
 
         try {
-            const res = await fetch(`${API_URL}/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.message || 'Login failed');
-            }
-
+            const data = await api.auth.login(form);
             localStorage.setItem('token', data.token);
             navigate('/dashboard');
         } catch (err) {

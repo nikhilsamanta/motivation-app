@@ -4,6 +4,8 @@ import { AuthContext, AuthContextType } from '../../src/context/AuthContext';
 import { api } from '../../src/api';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { scheduleDailyMotivation } from '../../src/hooks/useNotifications';
+import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
 
 const gradients = [
   ['rgba(124, 92, 252, 0.15)', 'rgba(192, 132, 252, 0.08)'],
@@ -53,14 +55,17 @@ export default function DashboardScreen() {
 
   const onRefresh = () => {
     setRefreshing(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     fetchQuotes();
   };
 
   const renderQuote = ({ item, index }: { item: Quote; index: number }) => {
     const accent = accentColors[index % accentColors.length];
-    // Basic fallback styling for gradient feel without heavy deps
     return (
-      <View style={[styles.card, { backgroundColor: gradients[index % gradients.length][0] }]}>
+      <Animated.View 
+        entering={FadeInDown.delay(index * 100).duration(600).springify()}
+        style={[styles.card, { backgroundColor: gradients[index % gradients.length][0] }]}
+      >
         <Text style={[styles.quoteMark, { color: accent }]}>❝</Text>
         <Text style={styles.quoteText}>{item.text}</Text>
         {item.author ? (
@@ -69,7 +74,7 @@ export default function DashboardScreen() {
             <Text style={styles.authorText}>{item.author}</Text>
           </View>
         ) : null}
-      </View>
+      </Animated.View>
     );
   };
 

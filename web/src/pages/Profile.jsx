@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { api } from '../api';
 import './Profile.css';
-
-const API_URL = 'http://localhost:5000/api';
 
 function Profile() {
     const navigate = useNavigate();
@@ -20,10 +19,7 @@ function Profile() {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const res = await fetch(`${API_URL}/auth/profile`, {
-                    headers: { Authorization: token },
-                });
-                const data = await res.json();
+                const data = await api.auth.getProfile();
                 setUser(data);
                 setNameForm(data.name || '');
             } catch (err) {
@@ -44,18 +40,7 @@ function Profile() {
         setLoadingName(true);
 
         try {
-            const res = await fetch(`${API_URL}/auth/update-name`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: token,
-                },
-                body: JSON.stringify({ name: nameForm }),
-            });
-
-            if (!res.ok) throw new Error('Failed to update name');
-
-            const data = await res.json();
+            const data = await api.auth.updateName(nameForm);
             setUser(data);
             setNameMsg({ type: 'success', text: 'Name updated successfully!' });
         } catch (err) {
@@ -77,17 +62,7 @@ function Profile() {
         setLoadingPass(true);
 
         try {
-            const res = await fetch(`${API_URL}/auth/change-password`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: token,
-                },
-                body: JSON.stringify({ password: passwordForm }),
-            });
-
-            if (!res.ok) throw new Error('Failed to change password');
-
+            await api.auth.changePassword(passwordForm);
             setPassMsg({ type: 'success', text: 'Password changed successfully!' });
             setPasswordForm('');
         } catch (err) {

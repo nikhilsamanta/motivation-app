@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Share } from 'react-native';
 import { AuthContext } from '../../src/context/AuthContext';
 import { api } from '../../src/api';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Clipboard from 'expo-clipboard';
-import * as Sharing from 'expo-sharing';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
 
 export default function ReferScreen() {
   const { user } = useContext(AuthContext);
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
 
@@ -30,6 +31,7 @@ export default function ReferScreen() {
   const copyToClipboard = async () => {
     if (user?.referralCode) {
       await Clipboard.setStringAsync(user.referralCode);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -39,17 +41,11 @@ export default function ReferScreen() {
     if (user?.referralCode) {
       const message = `Hey! Join me on MotiVerse for daily motivational quotes. Use my referral code: ${user.referralCode}`;
       try {
-        const isAvailable = await Sharing.isAvailableAsync();
-        if (isAvailable) {
-          // Sharing text directly in expo-sharing requires saving to a file first occasionally, 
-          // or we can use the React Native Share API which is simpler for text.
-          import('react-native').then(({ Share }) => {
-            Share.share({
-              message,
-            });
-          });
-        }
-      } catch (error) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        await Share.share({
+          message,
+        });
+      } catch (error: any) {
         console.log(error.message);
       }
     }
@@ -69,7 +65,7 @@ export default function ReferScreen() {
         <Text style={styles.headerTitle}>Refer a Friend</Text>
         <Text style={styles.headerSubtitle}>Share wisdom and grow the community</Text>
 
-        <View style={styles.heroCard}>
+        <Animated.View entering={FadeInDown.delay(100).duration(500)} style={styles.heroCard}>
           <Text style={styles.heroEmoji}>🤝</Text>
           <Text style={styles.heroTitle}>Invite your friends</Text>
           <Text style={styles.heroText}>Give your friends a daily dose of motivation. Share your unique code and see who joins!</Text>
@@ -87,19 +83,19 @@ export default function ReferScreen() {
           <TouchableOpacity style={styles.shareBtn} onPress={shareCode}>
             <Text style={styles.shareBtnText}>Share Link</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
-        <View style={styles.statsCard}>
+        <Animated.View entering={FadeInDown.delay(200).duration(500)} style={styles.statsCard}>
           <Text style={styles.statsTitle}>Your Impact</Text>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{stats?.referralCount || 0}</Text>
             <Text style={styles.statLabel}>Friends Joined</Text>
           </View>
           
-          {stats?.referredUsers?.length > 0 && (
+          {stats && stats.referredUsers && stats.referredUsers.length > 0 && (
             <View style={styles.userList}>
               <Text style={styles.listTitle}>Recent Signups</Text>
-              {stats.referredUsers.map((rUser, idx) => (
+              {stats.referredUsers.map((rUser: any, idx: number) => (
                 <View key={idx} style={styles.userRow}>
                   <View style={styles.userAvatar}>
                     <Text style={styles.userAvatarText}>{rUser.name.charAt(0).toUpperCase()}</Text>
@@ -112,7 +108,7 @@ export default function ReferScreen() {
               ))}
             </View>
           )}
-        </View>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );

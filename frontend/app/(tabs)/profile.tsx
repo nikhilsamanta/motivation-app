@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator,
 import { AuthContext, AuthContextType } from '../../src/context/AuthContext';
 import { api } from '../../src/api';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
 
 export default function ProfileScreen() {
   const { user, logout, refreshProfile } = useContext(AuthContext) as AuthContextType;
@@ -19,6 +21,7 @@ export default function ProfileScreen() {
   const handleTestNotification = async () => {
     setLoadingTest(true);
     try {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         // Fetch a real quote from the server to test with
         const quotesData = await api.quotes.getAll();
         const randomText = quotesData && quotesData.length > 0 
@@ -73,7 +76,7 @@ export default function ProfileScreen() {
         <Text style={styles.headerTitle}>Your Profile</Text>
         <Text style={styles.headerSubtitle}>Manage your account settings</Text>
 
-        <View style={styles.card}>
+        <Animated.View entering={FadeInDown.delay(100).duration(500)} style={styles.card}>
           <View style={styles.userInfo}>
             <View style={styles.avatar}>
               <Text style={styles.avatarText}>{user?.name?.charAt(0)?.toUpperCase() || '?'}</Text>
@@ -88,9 +91,9 @@ export default function ProfileScreen() {
               )}
             </View>
           </View>
-        </View>
+        </Animated.View>
 
-        <View style={styles.card}>
+        <Animated.View entering={FadeInDown.delay(200).duration(500)} style={styles.card}>
           <Text style={styles.cardTitle}>Change Name</Text>
           {nameMsg.text ? (
             <View style={[styles.msgBox, nameMsg.type === 'error' ? styles.msgError : styles.msgSuccess]}>
@@ -104,12 +107,19 @@ export default function ProfileScreen() {
             onChangeText={setNameForm}
             placeholderTextColor="#888"
           />
-          <TouchableOpacity style={styles.button} onPress={handleNameUpdate} disabled={loadingName}>
+          <TouchableOpacity 
+            style={styles.button} 
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              handleNameUpdate();
+            }} 
+            disabled={loadingName}
+          >
             {loadingName ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Update Name</Text>}
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
-        <View style={styles.card}>
+        <Animated.View entering={FadeInDown.delay(300).duration(500)} style={styles.card}>
           <Text style={styles.cardTitle}>Change Password</Text>
           {passMsg.text ? (
             <View style={[styles.msgBox, passMsg.type === 'error' ? styles.msgError : styles.msgSuccess]}>
@@ -125,10 +135,17 @@ export default function ProfileScreen() {
             value={passwordForm}
             onChangeText={setPasswordForm}
           />
-          <TouchableOpacity style={styles.button} onPress={handlePasswordChange} disabled={loadingPass}>
+          <TouchableOpacity 
+            style={styles.button} 
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              handlePasswordChange();
+            }} 
+            disabled={loadingPass}
+          >
             {loadingPass ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Change Password</Text>}
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
         <TouchableOpacity 
           style={[styles.logoutButton, { borderColor: '#7c5cfc', marginBottom: 12 }]} 
@@ -138,7 +155,13 @@ export default function ProfileScreen() {
           {loadingTest ? <ActivityIndicator color="#7c5cfc" /> : <Text style={[styles.logoutText, { color: '#7c5cfc' }]}>Test Push Notification</Text>}
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+        <TouchableOpacity 
+          style={styles.logoutButton} 
+          onPress={() => {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+            logout();
+          }}
+        >
           <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>
       </ScrollView>

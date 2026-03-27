@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-const API_URL = 'http://localhost:5000/api';
+import { api } from '../api';
 
 function Register() {
     const navigate = useNavigate();
@@ -24,18 +23,7 @@ function Register() {
         setLoading(true);
 
         try {
-            const res = await fetch(`${API_URL}/auth/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.message || 'Registration failed');
-            }
-
+            await api.auth.register(form);
             // Auto-login after registration: go to login page
             navigate('/login');
         } catch (err) {
