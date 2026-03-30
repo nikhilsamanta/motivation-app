@@ -2,13 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
-// Get the host IP dynamically from Expo's Constants
-const hostUri = Constants.expoConfig?.hostUri;
-const hostIp = hostUri ? hostUri.split(':')[0] : '192.168.1.13';
-
-const BASE_URL = Platform.OS === 'web' 
-    ? 'http://localhost:5000/api' 
-    : `http://${hostIp}:5000/api`;
+// API configuration for production and development
+const BASE_URL = 'https://motivation-app-backend-bgd7abfkf9eegahs.francecentral-01.azurewebsites.net/api';
 
 
 const apiFetch = async (endpoint: string, options: any = {}) => {
