@@ -54,6 +54,9 @@ export const api = {
             body: JSON.stringify({ password })
         }),
         getReferrals: () => apiFetch('/auth/referrals'),
+        getNotifications: () => apiFetch('/auth/notifications'),
+        markNotificationRead: (id) => apiFetch(`/auth/notifications/${id}/read`, { method: 'PUT' }),
+        markAllNotificationsRead: () => apiFetch('/auth/notifications/read-all', { method: 'PUT' }),
     },
     quotes: {
         getAll: () => apiFetch('/quotes/all')

@@ -1,6 +1,7 @@
 const cron = require("node-cron");
 const Quote = require("../models/Quote");
 const User = require("../models/User");
+const Notification = require("../models/Notification");
 const { Expo } = require("expo-server-sdk");
 
 const expo = new Expo();
@@ -33,6 +34,15 @@ cron.schedule("0 8 * * *", async () => {
                 title: 'Daily Inspiration 🌟',
                 body: quote.text,
                 data: { quoteId: quote._id },
+            });
+
+            // Persist to database for Web UI
+            await Notification.create({
+                userId: user._id,
+                title: 'Daily Inspiration 🌟',
+                message: quote.text,
+                type: 'daily_quote',
+                data: { quoteId: quote._id }
             });
         }
 

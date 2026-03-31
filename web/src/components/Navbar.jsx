@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import NotificationBell from './NotificationBell';
 import './Navbar.css';
 
 function Navbar({ userName, onLogout }) {
@@ -14,6 +15,7 @@ function Navbar({ userName, onLogout }) {
                     <Link to="/refer" className="navbar-link">Refer</Link>
                     <Link to="/profile" className="navbar-link">Profile</Link>
                     <div className="navbar-divider" />
+                    <NotificationBell />
                     <div className="navbar-user">
                         <div className="navbar-avatar">
                             {userName?.charAt(0)?.toUpperCase() || '?'}

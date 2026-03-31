@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
+const Notification = require("../models/Notification");
 const bcrypt = require("bcrypt");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -172,6 +173,50 @@ router.put("/push-token", authMiddleware, async (req, res) => {
 });
 
 // Get referral stats
+// Get notifications
+router.get("/notifications", authMiddleware, async (req, res) => {
+    try {
+        const notifications = await Notification.find({ userId: req.user.id })
+            .sort({ createdAt: -1 })
+            .limit(20);
+        
+        const unreadCount = await Notification.countDocuments({ 
+            userId: req.user.id, 
+            isRead: false 
+        });
+
+        res.json({ notifications, unreadCount });
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching notifications" });
+    }
+});
+
+// Mark notification as read
+router.put("/notifications/:id/read", authMiddleware, async (req, res) => {
+    try {
+        await Notification.findOneAndUpdate(
+            { _id: req.params.id, userId: req.user.id },
+            { isRead: true }
+        );
+        res.json({ message: "Notification marked as read" });
+    } catch (error) {
+        res.status(500).json({ message: "Error marking notification as read" });
+    }
+});
+
+// Mark all as read
+router.put("/notifications/read-all", authMiddleware, async (req, res) => {
+    try {
+        await Notification.updateMany(
+            { userId: req.user.id, isRead: false },
+            { isRead: true }
+        );
+        res.json({ message: "All notifications marked as read" });
+    } catch (error) {
+        res.status(500).json({ message: "Error marking all as read" });
+    }
+});
+
 router.get("/referrals", authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
