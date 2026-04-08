@@ -25,6 +25,22 @@ const quotes = [
     { text: "Don't wait for opportunity. Create it.", author: "Unknown" },
     { text: "The harder you work for something, the greater you'll feel when you achieve it.", author: "Unknown" },
     { text: "Strive for progress, not perfection.", author: "Unknown" },
+    { text: "Success is not the key to happiness. Happiness is the key to success.", author: "Albert Schweitzer" },
+    { text: "The only limit to our realization of tomorrow will be our doubts of today.", author: "Franklin D. Roosevelt" },
+    { text: "Do not go where the path may lead, go instead where there is no path and leave a trail.", author: "Ralph Waldo Emerson" },
+    { text: "The mind is everything. What you think you become.", author: "Buddha" },
+    { text: "It is during our darkest moments that we must focus to see the light.", author: "Aristotle" },
+    { text: "Do not let what you cannot do interfere with what you can do.", author: "John Wooden" },
+    { text: "The purpose of life is not to be happy. It is to be useful, to be honorable, to be compassionate, to have it make some difference that you have lived and lived well.", author: "Ralph Waldo Emerson" },
+    { text: "In the end, we will remember not the words of our enemies, but the silence of our friends.", author: "Martin Luther King Jr." },
+    { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+    { text: "The only true wisdom is in knowing you know nothing.", author: "Socrates" },
+    { text: "It is better to fail in originality than to succeed in imitation.", author: "Herman Melville" },
+    { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", author: "Nelson Mandela" },
+    { text: "If you want to lift yourself up, lift up someone else.", author: "Booker T. Washington" },
+    { text: "The only way to have a friend is to be one.", author: "Ralph Waldo Emerson" },
+    { text: "You must do the things you think you cannot do.", author: "Eleanor Roosevelt" },
+
 ];
 
 const seedDB = async () => {
